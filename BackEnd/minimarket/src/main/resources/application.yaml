@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: minimarket
+  profiles:
+    active: local  # cambiar en despliegue
