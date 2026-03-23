@@ -3,11 +3,13 @@ package com.spotgourmet.minimarket.auth.application.usecase;
 import com.spotgourmet.minimarket.auth.application.dto.LoginRequest;
 import com.spotgourmet.minimarket.auth.application.dto.LoginResponse;
 import com.spotgourmet.minimarket.auth.infrastructure.persistence.entity.RefreshToken;
+import com.spotgourmet.minimarket.auth.infrastructure.persistence.entity.RefreshTokenEntity;
 import com.spotgourmet.minimarket.auth.infrastructure.persistence.repository.JpaRefreshTokenRepository;
 import com.spotgourmet.minimarket.auth.infrastructure.persistence.repository.JpaUserRepository;
 import com.spotgourmet.minimarket.auth.infrastructure.security.JwtProvider;
 import com.spotgourmet.minimarket.shared.exception.ResourceNotFoundException;
 import com.spotgourmet.minimarket.shared.exception.UnauthorizedException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class AuthenticateUserUseCase {
 
     private final JpaUserRepository userRepository;
@@ -46,9 +49,9 @@ public class AuthenticateUserUseCase {
 
         String refreshTokenValue = UUID.randomUUID().toString();
 
-        RefreshToken refreshToken = new RefreshToken();
+        RefreshTokenEntity refreshToken = new RefreshTokenEntity();
         refreshToken.setUser(user);
-        refreshToken.setTokenHash(refreshTokenValue);
+        refreshToken.setToken(refreshTokenValue);
         refreshToken.setExpiresAt(Instant.now().plusSeconds(60 * 60 * 24));
         refreshToken.setRevoked(false);
         refreshToken.setCreatedAt(Instant.now());
